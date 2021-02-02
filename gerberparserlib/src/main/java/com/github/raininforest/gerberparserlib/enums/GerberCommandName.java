@@ -1,0 +1,31 @@
+package com.github.raininforest.gerberparserlib.enums;
+
+public enum GerberCommandName {
+    FS,
+    MO,
+    D01,
+    D02,
+    D03,
+    DNN,
+    G01,
+    G02,
+    G03,
+    G36,
+    G37,
+    G74,
+    G75,
+    AD,
+    AM,
+    LP,
+    LM,
+    LR,
+    LS,
+    TF,
+    TA,
+    TO,
+    TD,
+    AB,
+    SR,
+    M02,
+    NO_COMMAND
+}

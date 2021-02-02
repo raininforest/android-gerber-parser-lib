@@ -1,0 +1,2 @@
+include ':gerberparserlib'
+rootProject.name = "GerberParser"

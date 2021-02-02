@@ -1,0 +1,23 @@
+package com.github.raininforest.gerberparserlib.syntaxparser.macrotemplates;
+
+import com.github.raininforest.gerberparserlib.enums.ArithmeticOperation;
+import com.github.raininforest.gerberparserlib.enums.ExpressionItemType;
+
+public class Operator extends ExpressionItem {
+    private ArithmeticOperation operation = ArithmeticOperation.NO_OPERATION;
+
+    public Operator(ArithmeticOperation operation) {
+        this.expressionItemType = ExpressionItemType.OPERATOR;
+        this.operation = operation;
+        log.trace("Operator {operation=" + this.operation + "} created");
+    }
+
+    public ArithmeticOperation getOperation() {
+        return operation;
+    }
+
+    @Override
+    public String toString() {
+        return operation.toString();
+    }
+}
