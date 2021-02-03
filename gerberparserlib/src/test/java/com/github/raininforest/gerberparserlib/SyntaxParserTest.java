@@ -10,6 +10,8 @@ import org.junit.Test;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+// add VM option: -Dlog4j.configurationFile="src/log4j2_config.xml"
+// to watch all log levels
 public class SyntaxParserTest {
     private SyntaxParser syntaxParser;
 
