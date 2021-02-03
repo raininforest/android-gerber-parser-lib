@@ -2,6 +2,11 @@ package com.github.raininforest.gerberparserlib.syntaxparser.macrotemplates;
 
 import com.github.raininforest.gerberparserlib.enums.ExpressionItemType;
 
+/**
+ * Represents variable in arithmetic expressions and macro templates parameters
+ *
+ * @author Sergey Velesko
+ */
 public class Variable extends Operand {
     private final int index;
 

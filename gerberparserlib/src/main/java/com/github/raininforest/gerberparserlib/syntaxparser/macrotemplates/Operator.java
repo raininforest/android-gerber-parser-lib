@@ -3,6 +3,11 @@ package com.github.raininforest.gerberparserlib.syntaxparser.macrotemplates;
 import com.github.raininforest.gerberparserlib.enums.ArithmeticOperation;
 import com.github.raininforest.gerberparserlib.enums.ExpressionItemType;
 
+/**
+ * Represents operator in arithmetic expressions
+ *
+ * @author Sergey Velesko
+ */
 public class Operator extends ExpressionItem {
     private ArithmeticOperation operation = ArithmeticOperation.NO_OPERATION;
 

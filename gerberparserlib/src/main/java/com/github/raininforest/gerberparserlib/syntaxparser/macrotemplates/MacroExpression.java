@@ -12,6 +12,11 @@ import java.util.Deque;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Arithmetic expression. Used in macro template definition
+ *
+ * @author Sergey Velesko
+ */
 public class MacroExpression {
     protected static final Logger log = LogManager.getLogger();
     private final List<ExpressionItem> expressionItems;
@@ -28,8 +33,13 @@ public class MacroExpression {
         return calculatePostfixExpression(infixToPostfixExpression(expressionItems));
     }
 
+    /**
+     * Convert expression from infix to postfix notation
+     * @param infixExpression List of ExpressionItem in infix notation
+     * @return List of ExpressionItem in postfix notation
+     * @throws NoSuchElementException
+     */
     private List<ExpressionItem> infixToPostfixExpression(List<ExpressionItem> infixExpression) throws NoSuchElementException {
-        //TODO
         Deque<Operator> operationStack = new ArrayDeque<>();
         List<ExpressionItem> postfixExpression = new ArrayList<>();
         for (ExpressionItem expressionItem : infixExpression) {
@@ -65,6 +75,13 @@ public class MacroExpression {
         return postfixExpression;
     }
 
+    /**
+     * Calculating expression in postfix notation
+     * @param postfixExpression expression
+     * @return double result
+     * @throws ArithmeticException
+     * @throws NoSuchElementException
+     */
     private double calculatePostfixExpression(List<ExpressionItem> postfixExpression) throws ArithmeticException, NoSuchElementException {
         Deque<Double> operandStack = new ArrayDeque<>();
         for (ExpressionItem expressionItem : postfixExpression) {

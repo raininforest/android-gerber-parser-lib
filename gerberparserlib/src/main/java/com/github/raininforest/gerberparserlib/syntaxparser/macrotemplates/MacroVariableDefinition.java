@@ -1,5 +1,10 @@
 package com.github.raininforest.gerberparserlib.syntaxparser.macrotemplates;
 
+/**
+ * Represents variable definition
+ *
+ * @author Sergey Velesko
+ */
 public class MacroVariableDefinition extends MacroBodyItem {
     private final Variable variable;
     private final MacroExpression expression;
