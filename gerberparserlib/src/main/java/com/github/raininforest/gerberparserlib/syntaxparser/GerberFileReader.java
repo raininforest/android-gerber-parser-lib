@@ -18,6 +18,8 @@ import java.util.List;
 
 /**
  * The GerberFileReader. Reads file and stores lines in List of Strings
+ *
+ * @author Sergey Velesko
  */
 public class GerberFileReader {
     private static final Logger log = LogManager.getLogger();
