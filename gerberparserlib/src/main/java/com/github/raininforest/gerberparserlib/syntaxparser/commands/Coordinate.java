@@ -2,6 +2,11 @@ package com.github.raininforest.gerberparserlib.syntaxparser.commands;
 
 import com.github.raininforest.gerberparserlib.enums.CoordinateType;
 
+/**
+ * Represents coordinate with its type and value
+ *
+ * @author Sergey Velesko
+ */
 public class Coordinate {
     private final double value;
     private final CoordinateType coordinateType;
