@@ -1,5 +1,7 @@
 package com.github.raininforest.gerberparserlib.syntaxparser.macrotemplates;
 
+import com.github.raininforest.gerberparserlib.enums.MacroItemType;
+
 /**
  * Represents variable definition
  *
@@ -12,6 +14,7 @@ public class MacroVariableDefinition extends MacroBodyItem {
     public MacroVariableDefinition(Variable variable, MacroExpression expression) {
         this.variable = variable;
         this.expression = expression;
+        this.macroItemType = MacroItemType.VARIABLE_DEFINITION;
         log.trace("VariableDefinition {" + this + "} created");
     }
 

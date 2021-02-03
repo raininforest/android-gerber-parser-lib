@@ -1,5 +1,7 @@
 package com.github.raininforest.gerberparserlib.syntaxparser.macrotemplates;
 
+import com.github.raininforest.gerberparserlib.enums.MacroItemType;
+
 import java.util.List;
 
 /**
@@ -14,6 +16,7 @@ public class MacroPrimitiveDefinition extends MacroBodyItem {
     public MacroPrimitiveDefinition(int primitiveCode, List<MacroExpression> modifiers) {
         this.primitiveCode = primitiveCode;
         this.modifiers = modifiers;
+        this.macroItemType = MacroItemType.MACRO_PRIMITIVE_DEFINITION;
         log.trace("MacroPrimitiveDefinition {" + this + "} created");
     }
 
