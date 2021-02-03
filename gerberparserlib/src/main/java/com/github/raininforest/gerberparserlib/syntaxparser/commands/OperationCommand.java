@@ -5,6 +5,9 @@ import com.github.raininforest.gerberparserlib.exceptions.WrongCoordinateCountEx
 
 import java.util.List;
 
+/**
+ * Abstract operation command D01/D02/D03 with coordinate data
+ */
 public abstract class OperationCommand extends GerberCommand{
     protected List<Coordinate> coordinateDataList;
     protected int MIN_COORDINATE_COUNT;
