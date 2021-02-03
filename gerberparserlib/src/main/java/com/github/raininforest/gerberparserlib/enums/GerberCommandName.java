@@ -26,6 +26,5 @@ public enum GerberCommandName {
     TD,
     AB,
     SR,
-    M02,
-    NO_COMMAND
+    M02
 }
