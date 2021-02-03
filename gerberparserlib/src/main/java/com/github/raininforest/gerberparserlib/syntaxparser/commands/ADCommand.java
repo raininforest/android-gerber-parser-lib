@@ -12,6 +12,14 @@ public class ADCommand extends GerberCommand {
     private final String apertureTemplateName;
     private final List<Double> parameterList;
 
+    /**
+     * Standart aperture constructor
+     * @param apertureId
+     * @param standartApertureTemplateType
+     * @param parameterList
+     * @param stringNumber
+     * @throws WrongApertureNumberException
+     */
     public ADCommand(int apertureId,
                      ApertureTemplateType standartApertureTemplateType,
                      List<Double> parameterList,
@@ -28,6 +36,14 @@ public class ADCommand extends GerberCommand {
         log.trace("ADCommand (STANDART) created");
     }
 
+    /**
+     * Macro aperture constructor
+     * @param apertureId
+     * @param macroApertureTemplateName
+     * @param parameterList
+     * @param stringNumber
+     * @throws WrongApertureNumberException
+     */
     public ADCommand(int apertureId,
                      String macroApertureTemplateName,
                      List<Double> parameterList,
