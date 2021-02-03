@@ -54,6 +54,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The SyntaxParser. Parses lines from gerber file (line by line from List of Strings).
+ * Gives a list of gerber commands.
+ *
+ * @author Sergey Velesko
+ */
 public class SyntaxParser {
     private static final Logger log = LogManager.getLogger();
     private static final int DEFAULT_INT_DIGIT_COUNT = 3;
@@ -103,7 +109,7 @@ public class SyntaxParser {
     }
 
     /**
-     * Parsing strings from gerber file into GerberCommand list
+     * Parsing into list of gerber commands
      * @return List<GerberCommand>
      */
     public List<GerberCommand> parse() {
@@ -213,7 +219,7 @@ public class SyntaxParser {
 
     /**
      * Print all gerber commands from output list
-     * @param gerberCommands List of GerberCommand
+     * @param gerberCommands List of gerber commands
      */
     private void printGerberCommands(List<GerberCommand> gerberCommands) {
         log.trace("----------------------------------------------------------");
@@ -221,28 +227,6 @@ public class SyntaxParser {
         log.trace("----------------------------------------------------------");
         for (GerberCommand command : gerberCommands) {
             log.trace(command);
-        }
-    }
-
-    private void checkDeprecatedGCodeInOperation(String currentString) {
-        if (currentString.contains("G01")) {
-            gerberCommands.add(createG01());
-        } else if (currentString.contains("G02")) {
-            gerberCommands.add(createG02());
-        } else if (currentString.contains("G03")) {
-            gerberCommands.add(createG03());
-        }
-    }
-
-    private GerberCommand createDCode(String currentString) {
-        Matcher matcher = DNN_PATTERN.matcher(currentString);
-        if (matcher.find()) {
-            log.trace("Dnn regexp find");
-            int apertureNumber = Integer.parseInt(matcher.group(2));
-            log.trace("Aperture number=" + apertureNumber);
-            return new DnnCommand(apertureNumber, lineIndex);
-        } else {
-            return createD01D02D03(currentString);
         }
     }
 
@@ -335,6 +319,11 @@ public class SyntaxParser {
         return new AMCommand(macroName, macroBodyItems, lineIndex);
     }
 
+    /**
+     * Parses AM primitive definition object for AM Command
+     * @param definition string containing primitive definition
+     * @return MacroPrimitiveDefinition
+     */
     private MacroPrimitiveDefinition createAMPrimitiveDefinition(String definition) {
         String[] definitionItems = definition.split(",");
         log.trace("create AM primitive definition: " + Arrays.toString(definitionItems));
@@ -348,16 +337,29 @@ public class SyntaxParser {
         return new MacroPrimitiveDefinition(primitiveCode, parameters);
     }
 
+    /**
+     * Parses AM variable definition object for AM Command
+     * @param definition string containing variable definition
+     * @return MacroPrimitiveDefinition
+     */
     private MacroVariableDefinition createAMVariableDefinition(String definition) {
         String[] definitionItems = definition.split("=");
         log.trace("Create AM var definition: " + Arrays.toString(definitionItems));
+
         StringBuilder varIndexBuilder = new StringBuilder(definitionItems[0].trim());
         varIndexBuilder.deleteCharAt(0);
         Variable variable = new Variable(Integer.parseInt(varIndexBuilder.toString()));
+
         MacroExpression expression = createAMExpression(definitionItems[1].trim());
         return new MacroVariableDefinition(variable, expression);
     }
 
+    /**
+     * Parses arithmetical expression from string (parameter)
+     * Used in variable and primitive definition
+     * @param parameter string to be parsed as arithmetical expression
+     * @return MacroExpression
+     */
     private MacroExpression createAMExpression(String parameter) {
         parameter = parameter.trim();
         log.trace("Creating expression from string: " + parameter);
@@ -426,6 +428,28 @@ public class SyntaxParser {
         return resultExpression;
     }
 
+    /**
+     * Command with D-code creating
+     * @param currentString current string from file
+     * @return GerberCommand
+     */
+    private GerberCommand createDCode(String currentString) {
+        Matcher matcher = DNN_PATTERN.matcher(currentString);
+        if (matcher.find()) {
+            log.trace("Dnn regexp find");
+            int apertureNumber = Integer.parseInt(matcher.group(2));
+            log.trace("Aperture number=" + apertureNumber);
+            return new DnnCommand(apertureNumber, lineIndex);
+        } else {
+            return createD01D02D03(currentString);
+        }
+    }
+
+    /**
+     * D01/D02/D03 command creating
+     * @param currentString current string from file
+     * @return GerberCommand
+     */
     private GerberCommand createD01D02D03(String currentString) {
         Matcher matcher = COORDINATE_DATA.matcher(currentString);
         log.trace("Create D01D02D03: ");
@@ -464,6 +488,13 @@ public class SyntaxParser {
         }
     }
 
+    /**
+     * Creates coordinate from coordinate name and value
+     * @param coordinateName X|Y|I|J
+     * @param coordinateStringVal string value of coordinate
+     * @return Coordinate
+     * @throws IllegalArgumentException
+     */
     private Coordinate parseCoordinate(String coordinateName, String coordinateStringVal) throws IllegalArgumentException {
         CoordinateType coordinateType;
         switch (coordinateName) {
@@ -502,6 +533,21 @@ public class SyntaxParser {
         return new Coordinate(value, coordinateType);
     }
 
+    /**
+     * Looking for G-code (G01/G02/G03) in current string with operation commands.
+     * Used for supporting deprectaed practices
+     * @param currentString current string from file
+     */
+    private void checkDeprecatedGCodeInOperation(String currentString) {
+        if (currentString.contains("G01")) {
+            gerberCommands.add(createG01());
+        } else if (currentString.contains("G02")) {
+            gerberCommands.add(createG02());
+        } else if (currentString.contains("G03")) {
+            gerberCommands.add(createG03());
+        }
+    }
+
     private G01Command createG01() {
         return new G01Command(lineIndex);
     }
@@ -535,6 +581,7 @@ public class SyntaxParser {
         log.trace("LP match regexp find: " + matcher.find());
         String polarityStr = matcher.group(1);
         log.trace("Polarity=" + polarityStr);
+
         Polarity polarity;
         if (polarityStr.equals("D")) {
             polarity = Polarity.DARK;
@@ -551,6 +598,7 @@ public class SyntaxParser {
         log.trace("LM match regexp find: " + matcher.find());
         String mirroringStr = matcher.group(1);
         log.trace("Mirroring=" + mirroringStr);
+
         Mirroring mirroring;
         switch (mirroringStr) {
             case "X":
@@ -576,6 +624,7 @@ public class SyntaxParser {
         log.trace("LR match regexp find: " + matcher.find());
         String rotationStr = matcher.group(1);
         log.trace("Rotation=" + rotationStr);
+
         double rotation;
         try {
             rotation = Double.parseDouble(rotationStr);
@@ -590,6 +639,7 @@ public class SyntaxParser {
         log.trace("LS match regexp find: " + matcher.find());
         String scalingStr = matcher.group(1);
         log.trace("Scaling=" + scalingStr);
+
         double scaling;
         try {
             scaling = Double.parseDouble(scalingStr);
@@ -619,6 +669,11 @@ public class SyntaxParser {
         return null;
     }
 
+    /**
+     * Creates opening or closing SR command
+     * @param currentString current string from file
+     * @return SROpenCommand or SRCloseCommand
+     */
     private GerberCommand createSR(String currentString) {
         if (currentString.contains("%SR*%")) {
             return new SRCloseCommand(lineIndex);
@@ -652,6 +707,11 @@ public class SyntaxParser {
         }
     }
 
+    /**
+     * Creates opening or closing AB command
+     * @param currentString current string from file
+     * @return ABOpenCommand or ABCloseCommand
+     */
     private GerberCommand createAB(String currentString) {
         Matcher matcher = AB_PATTERN.matcher(currentString);
         log.trace("AB match regexp find: " + matcher.find());
@@ -663,6 +723,9 @@ public class SyntaxParser {
         return new ABCloseCommand(lineIndex);
     }
 
+    /**
+     * Stores the coordinate data format of the gerber file after FS command parsing
+     */
     private class FormatSpecification {
         private final int integerDigitCount;
         private final int decimalDigitCount;
