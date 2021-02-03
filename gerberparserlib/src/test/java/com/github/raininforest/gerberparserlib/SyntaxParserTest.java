@@ -18,7 +18,7 @@ public class SyntaxParserTest {
     @Before
     public void init() throws FileNotFoundException {
         GerberFileReader gerberFileReader = new GerberFileReader(
-                "src/test/test_gerbers/gerber_example.top");
+                "src/test/test_gerbers/gerber4");
         List<String> stringList = gerberFileReader.getStringList();
         syntaxParser = new SyntaxParser(stringList);
     }
