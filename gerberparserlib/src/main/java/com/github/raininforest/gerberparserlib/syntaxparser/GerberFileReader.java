@@ -16,6 +16,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The GerberFileReader. Reads file and stores lines in List of Strings
+ */
 public class GerberFileReader {
     private static final Logger log = LogManager.getLogger();
     private final String filename;
