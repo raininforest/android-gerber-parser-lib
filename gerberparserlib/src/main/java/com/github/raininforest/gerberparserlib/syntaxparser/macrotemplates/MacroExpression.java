@@ -146,7 +146,9 @@ public class MacroExpression {
     public String toString() {
         StringBuilder resultString = new StringBuilder("Expression: ");
         for (ExpressionItem item : expressionItems) {
-            resultString.append('[' + item.toString() + ']');
+            resultString.append('[')
+                    .append(item.toString())
+                    .append(']');
         }
         return resultString.toString();
     }
