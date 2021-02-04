@@ -4,7 +4,7 @@ import com.github.raininforest.gerberparserlib.enums.GerberCommandName;
 
 public class LRCommand extends GerberCommand{
     //The rotation angle, in degrees, counterclockwise.
-    private double rotation;
+    private final double rotation;
 
     public LRCommand(double rotation, int stringNumber) {
         super(stringNumber, GerberCommandName.LR);
