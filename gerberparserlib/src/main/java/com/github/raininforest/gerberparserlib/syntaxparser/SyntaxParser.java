@@ -493,7 +493,7 @@ public class SyntaxParser {
      * @param coordinateName X|Y|I|J
      * @param coordinateStringVal string value of coordinate
      * @return Coordinate
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException when coordinate type is wrong or undefined
      */
     private Coordinate parseCoordinate(String coordinateName, String coordinateStringVal) throws IllegalArgumentException {
         CoordinateType coordinateType;
