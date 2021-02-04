@@ -17,7 +17,7 @@ public class MacroPrimitiveDefinition extends MacroBodyItem {
         this.primitiveCode = primitiveCode;
         this.modifiers = modifiers;
         this.macroItemType = MacroItemType.MACRO_PRIMITIVE_DEFINITION;
-        log.trace("MacroPrimitiveDefinition {" + this + "} created");
+        log.trace("MacroPrimitiveDefinition {" + this.toString() + "} created");
     }
 
     public int getPrimitiveCode() {
