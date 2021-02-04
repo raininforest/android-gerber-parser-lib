@@ -5,7 +5,7 @@ import com.github.raininforest.gerberparserlib.enums.GerberCommandName;
 import com.github.raininforest.gerberparserlib.enums.Polarity;
 
 public class LPCommand extends GerberCommand{
-    private Polarity polarity;
+    private final Polarity polarity;
 
     public LPCommand(Polarity polarity, int stringNumber) {
         super(stringNumber, GerberCommandName.LP);
