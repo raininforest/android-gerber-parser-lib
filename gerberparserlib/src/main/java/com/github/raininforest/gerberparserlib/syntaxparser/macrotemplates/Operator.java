@@ -9,7 +9,7 @@ import com.github.raininforest.gerberparserlib.enums.ExpressionItemType;
  * @author Sergey Velesko
  */
 public class Operator extends ExpressionItem {
-    private ArithmeticOperation operation = ArithmeticOperation.NO_OPERATION;
+    private final ArithmeticOperation operation;
 
     public Operator(ArithmeticOperation operation) {
         this.expressionItemType = ExpressionItemType.OPERATOR;
