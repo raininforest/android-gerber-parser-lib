@@ -4,7 +4,7 @@ import com.github.raininforest.gerberparserlib.enums.GerberCommandName;
 import com.github.raininforest.gerberparserlib.exceptions.WrongApertureNumberException;
 
 public class ABOpenCommand extends GerberCommand{
-    private int apertureId;
+    private final int apertureId;
 
     public ABOpenCommand(int apertureId, int stringNumber) throws WrongApertureNumberException{
         super(stringNumber, GerberCommandName.AB);
