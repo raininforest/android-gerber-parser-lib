@@ -8,8 +8,7 @@ public enum ArithmeticOperation {
     MULTIPLY(2),
     DIVIDE(2),
     OPENING_PARENTHESIS,
-    CLOSING_PARENTHESIS,
-    NO_OPERATION;
+    CLOSING_PARENTHESIS;
 
     private int priority;
 
