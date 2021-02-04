@@ -15,7 +15,7 @@ public class MacroVariableDefinition extends MacroBodyItem {
         this.variable = variable;
         this.expression = expression;
         this.macroItemType = MacroItemType.VARIABLE_DEFINITION;
-        log.trace("VariableDefinition {" + this + "} created");
+        log.trace("VariableDefinition {" + this.toString() + "} created");
     }
 
     public Variable getVariable() {
