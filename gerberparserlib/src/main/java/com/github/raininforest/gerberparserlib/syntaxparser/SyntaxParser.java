@@ -64,6 +64,7 @@ public class SyntaxParser {
     private static final Logger log = LogManager.getLogger();
     private static final int DEFAULT_INT_DIGIT_COUNT = 3;
     private static final int DEFAULT_DEC_DIGIT_COUNT = 6;
+    private static final int NOT_COMMENT_STRING_COUNT_TO_FIND_FS_MO = 10;
 
     private static final Pattern FS_PATTERN;
     private static final Pattern MO_PATTERN;
@@ -113,8 +114,15 @@ public class SyntaxParser {
      * @return List<GerberCommand>
      */
     public List<GerberCommand> parse() {
+
+        //checking is gerber file valid
+        if (!isGerberFileValid()) {
+            log.error("Gerber file is invalid");
+            return null;
+        }
         log.trace("start parsing...");
 
+        //reading line by line
         lineIndex = 0;
         while (lineIndex < gerberFileStringList.size()) {
             String currentString = gerberFileStringList.get(lineIndex);
@@ -215,6 +223,43 @@ public class SyntaxParser {
 
         printGerberCommands(gerberCommands);
         return gerberCommands;
+    }
+
+    /**
+     * Checks if file contains FS and MO commands
+     * @return true, if file is valid
+     */
+    private boolean isGerberFileValid() {
+        int stringNumber = 0;
+        int notCommentStringCounter = 0;
+        int counterFS = 0;
+        int counterMO = 0;
+        Matcher matcherFS;
+        Matcher matcherMO;
+        boolean fileIsValid = false;
+
+        while (stringNumber < NOT_COMMENT_STRING_COUNT_TO_FIND_FS_MO) {
+            String currentString = gerberFileStringList.get(stringNumber);
+            stringNumber++;
+            if (currentString.startsWith("G04")) {
+                continue;
+            }
+            notCommentStringCounter++;
+            matcherFS = FS_PATTERN.matcher(currentString);
+            if (matcherFS.find()) {
+                counterFS++;
+            }
+            matcherMO = MO_PATTERN.matcher(currentString);
+            if (matcherMO.find()) {
+                counterMO++;
+            }
+            if ((counterFS == 1) && (counterMO == 1)) {
+                fileIsValid = true;
+                break;
+            }
+        }
+
+        return fileIsValid;
     }
 
     /**
