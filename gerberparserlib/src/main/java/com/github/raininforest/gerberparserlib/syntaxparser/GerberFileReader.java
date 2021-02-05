@@ -44,7 +44,7 @@ public class GerberFileReader {
             log.trace("File " + filename + " opened");
             String line;
             while ((line = reader.readLine()) != null) {
-                log.trace(line);
+                //log.trace(line);
                 stringList.add(line);
             }
         } catch (IOException e) {
