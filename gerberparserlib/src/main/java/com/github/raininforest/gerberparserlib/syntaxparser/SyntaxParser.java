@@ -231,6 +231,12 @@ public class SyntaxParser {
      */
     private boolean isGerberFileValid() {
         int stringNumber = 0;
+        int counterFS = 0;
+        int counterMO = 0;
+        Matcher matcherFS;
+        Matcher matcherMO;
+        boolean fileIsValid = false;
+
         int notCommentStringCounter = 0;
         while (notCommentStringCounter < NOT_COMMENT_STRING_COUNT_TO_FIND_FS_MO) {
             String currentString = gerberFileStringList.get(stringNumber);
