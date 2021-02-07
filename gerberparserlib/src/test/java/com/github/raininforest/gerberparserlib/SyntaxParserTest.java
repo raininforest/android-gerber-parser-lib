@@ -18,8 +18,9 @@ public class SyntaxParserTest {
         File testGerberDir = new File("src/test/test_gerbers");
         File[] files = testGerberDir.listFiles();
         for (File file: files) {
-            GerberFileReader gerberFileReader = new GerberFileReader(file.getAbsolutePath());
-            SyntaxParser syntaxParser = new SyntaxParser(gerberFileReader.getStringList());
+            GerberFileReader gerberFileReader = new GerberFileReader(file.getPath());
+            SyntaxParser syntaxParser = new SyntaxParser(gerberFileReader.getFilename(),
+                    gerberFileReader.getStringList());
             syntaxParser.parse();
             System.out.println(file + " parsed");
         }
@@ -29,7 +30,8 @@ public class SyntaxParserTest {
     public void invalid_gerber_file_test() throws FileNotFoundException {
         GerberFileReader gerberFileReader = new GerberFileReader(
                 "src/test/test_gerbers/notValidFile");
-        SyntaxParser syntaxParser = new SyntaxParser(gerberFileReader.getStringList());
+        SyntaxParser syntaxParser = new SyntaxParser(gerberFileReader.getFilename(),
+                gerberFileReader.getStringList());
         Assert.isEmpty(syntaxParser.parse());
     }
 }

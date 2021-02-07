@@ -94,13 +94,15 @@ public class SyntaxParser {
         SR_PARAMETERS = Pattern.compile("([XYIJ])(\\d*\\.?\\d+)");
     }
 
+    private final String fileInfo;
     private final List<String> gerberFileStringList;
     private final List<GerberCommand> gerberCommands;
     private int lineIndex;
     private FormatSpecification coordinateFormat;
     private GerberCommandName deprecatedCurrentDCommand;
 
-    public SyntaxParser(List<String> gerberFileStringList) {
+    public SyntaxParser(String fileInfo, List<String> gerberFileStringList) {
+        this.fileInfo = fileInfo;
         this.gerberFileStringList = gerberFileStringList;
         this.gerberCommands = new ArrayList<>();
         this.deprecatedCurrentDCommand = GerberCommandName.D01;
@@ -117,7 +119,7 @@ public class SyntaxParser {
 
         //checking is gerber file valid
         if (!isGerberFileValid()) {
-            log.error("Gerber file is invalid");
+            log.error("Gerber file " + fileInfo + " is invalid!");
             return null;
         }
         log.trace("start parsing...");
@@ -216,7 +218,7 @@ public class SyntaxParser {
                 }
             } catch (IllegalStateException e) {
                 e.printStackTrace();
-                log.error("Illegal command format. String=" + lineIndex);
+                log.error("Illegal command format. File: " +  fileInfo + ". String=" + lineIndex);
             }
             lineIndex++;
         }
