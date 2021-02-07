@@ -3,7 +3,7 @@ package com.github.raininforest.gerberparserlib;
 import com.github.raininforest.gerberparserlib.syntaxparser.GerberFileReader;
 import com.github.raininforest.gerberparserlib.syntaxparser.SyntaxParser;
 
-import org.apache.logging.log4j.core.util.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
@@ -32,6 +32,6 @@ public class SyntaxParserTest {
                 "src/test/test_gerbers/notValidFile");
         SyntaxParser syntaxParser = new SyntaxParser(gerberFileReader.getFilename(),
                 gerberFileReader.getStringList());
-        Assert.isEmpty(syntaxParser.parse());
+        Assert.assertEquals(0, syntaxParser.parse().size());
     }
 }
