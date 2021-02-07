@@ -21,6 +21,7 @@ public class SyntaxParserTest {
             GerberFileReader gerberFileReader = new GerberFileReader(file.getAbsolutePath());
             SyntaxParser syntaxParser = new SyntaxParser(gerberFileReader.getStringList());
             syntaxParser.parse();
+            System.out.println(file + " parsed");
         }
     }
 
