@@ -120,7 +120,7 @@ public class SyntaxParser {
         //checking is gerber file valid
         if (!isGerberFileValid()) {
             log.error("Gerber file " + fileInfo + " is invalid!");
-            return null;
+            return gerberCommands;
         }
         log.trace("start parsing...");
 
