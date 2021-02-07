@@ -31,6 +31,10 @@ public class GerberFileReader {
         stringList = new ArrayList<>();
     }
 
+    public String getFilename() {
+        return filename;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public List<String> getStringList() throws FileNotFoundException {
         readGerberFile();
