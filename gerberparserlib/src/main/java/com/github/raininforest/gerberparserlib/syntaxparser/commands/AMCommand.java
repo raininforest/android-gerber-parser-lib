@@ -2,18 +2,31 @@ package com.github.raininforest.gerberparserlib.syntaxparser.commands;
 
 import com.github.raininforest.gerberparserlib.enums.GerberCommandName;
 import com.github.raininforest.gerberparserlib.syntaxparser.macrotemplates.MacroBodyItem;
+import com.github.raininforest.gerberparserlib.syntaxparser.macrotemplates.Variable;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AMCommand extends GerberCommand {
-    private String macroName;
-    private List<MacroBodyItem> macroBody;
+    private final String macroName;
+    private final List<MacroBodyItem> macroBody;
+    private final HashMap<Integer, Variable> varDictionary;
 
-    public AMCommand(String macroName, List<MacroBodyItem> macroBody, int stringNumber) {
+    public AMCommand(String macroName,
+                     List<MacroBodyItem> macroBody,
+                     HashMap<Integer, Variable> varDictionary,
+                     int stringNumber) {
         super(stringNumber, GerberCommandName.AM);
         this.macroName = macroName;
         this.macroBody = macroBody;
+        this.varDictionary = varDictionary;
         log.trace("AMCommand created");
+    }
+
+    public Map<Integer, Variable> getVarDictionary(){
+        return Collections.unmodifiableMap(varDictionary);
     }
 
     public String getMacroName() {

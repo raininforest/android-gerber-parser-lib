@@ -50,6 +50,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -356,22 +357,25 @@ public class SyntaxParser {
         String[] allAMStrings = amStringBuilder.toString().split("\\*");
         List<String> macroBodyItemStrings = new ArrayList<>(Arrays.asList(allAMStrings).subList(1, (allAMStrings.length - 1)));
         List<MacroBodyItem> macroBodyItems = new ArrayList<>();
+        HashMap<Integer, Variable> varDictionary = new HashMap<>();
         for (String definition : macroBodyItemStrings) {
             if ((definition.startsWith("$")) && (definition.contains("="))) {
-                macroBodyItems.add(createAMVariableDefinition(definition));
+                macroBodyItems.add(createAMVariableDefinition(definition, varDictionary));
             } else {
-                macroBodyItems.add(createAMPrimitiveDefinition(definition));
+                macroBodyItems.add(createAMPrimitiveDefinition(definition, varDictionary));
             }
         }
-        return new AMCommand(macroName, macroBodyItems, lineIndex);
+        return new AMCommand(macroName, macroBodyItems, varDictionary, lineIndex);
     }
 
     /**
      * Parses AM primitive definition object for AM Command
      * @param definition string containing primitive definition
+     * @param varDictionary dictionary of Variable
      * @return MacroPrimitiveDefinition
      */
-    private MacroPrimitiveDefinition createAMPrimitiveDefinition(String definition) {
+    private MacroPrimitiveDefinition createAMPrimitiveDefinition(String definition,
+                                                                 HashMap<Integer, Variable> varDictionary) {
         String[] definitionItems = definition.split(",");
         log.trace("create AM primitive definition: " + Arrays.toString(definitionItems));
 
@@ -379,7 +383,7 @@ public class SyntaxParser {
 
         List<MacroExpression> parameters = new ArrayList<>();
         for (int i = 1; i < definitionItems.length; i++) {
-            parameters.add(createAMExpression(definitionItems[i]));
+            parameters.add(createAMExpression(definitionItems[i], varDictionary));
         }
         return new MacroPrimitiveDefinition(primitiveCode, parameters);
     }
@@ -387,17 +391,27 @@ public class SyntaxParser {
     /**
      * Parses AM variable definition object for AM Command
      * @param definition string containing variable definition
+     * @param varDictionary dictionary of Variable
      * @return MacroPrimitiveDefinition
      */
-    private MacroVariableDefinition createAMVariableDefinition(String definition) {
+    private MacroVariableDefinition createAMVariableDefinition(String definition,
+                                                               HashMap<Integer, Variable> varDictionary) {
         String[] definitionItems = definition.split("=");
         log.trace("Create AM var definition: " + Arrays.toString(definitionItems));
 
         StringBuilder varIndexBuilder = new StringBuilder(definitionItems[0].trim());
         varIndexBuilder.deleteCharAt(0);
-        Variable variable = new Variable(Integer.parseInt(varIndexBuilder.toString()));
+        int varIndex = Integer.parseInt(varIndexBuilder.toString());
 
-        MacroExpression expression = createAMExpression(definitionItems[1].trim());
+        //check is there var with this index in varDictionary
+        Variable variable = null;
+        if (varDictionary.containsKey(varIndex)) {
+            variable = varDictionary.get(varIndex);
+        } else {
+            variable = new Variable(varIndex);
+            varDictionary.put(varIndex, variable);
+        }
+        MacroExpression expression = createAMExpression(definitionItems[1].trim(), varDictionary);
         return new MacroVariableDefinition(variable, expression);
     }
 
@@ -405,9 +419,10 @@ public class SyntaxParser {
      * Parses arithmetical expression from string (parameter)
      * Used in variable and primitive definition
      * @param parameter string to be parsed as arithmetical expression
+     * @param varDictionary dictionary of Variable
      * @return MacroExpression
      */
-    private MacroExpression createAMExpression(String parameter) {
+    private MacroExpression createAMExpression(String parameter, HashMap<Integer, Variable> varDictionary) {
         parameter = parameter.trim();
         log.trace("Creating expression from string: " + parameter);
         MacroExpression resultExpression = new MacroExpression();
@@ -450,7 +465,17 @@ public class SyntaxParser {
                     }
                     i = varIndexParseIndex - 1;
                     int varIndex = Integer.parseInt(varIndexBuilder.toString());
-                    resultExpression.addExpressionItem(new Variable(varIndex));
+
+                    //check is there var with this index in varDictionary
+                    Variable variable = null;
+                    if (varDictionary.containsKey(varIndex)) {
+                        variable = varDictionary.get(varIndex);
+                    } else {
+                        variable = new Variable(varIndex);
+                        varDictionary.put(varIndex, variable);
+                    }
+
+                    resultExpression.addExpressionItem(variable);
                 }
                 break;
                 default: {
