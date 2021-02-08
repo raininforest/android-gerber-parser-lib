@@ -33,16 +33,8 @@ public class AMCommand extends GerberCommand {
         return macroName;
     }
 
-    public void setMacroName(String macroName) {
-        this.macroName = macroName;
-    }
-
     public List<MacroBodyItem> getMacroBody() {
         return macroBody;
-    }
-
-    public void setMacroBody(List<MacroBodyItem> macroBody) {
-        this.macroBody = macroBody;
     }
 
     @Override
